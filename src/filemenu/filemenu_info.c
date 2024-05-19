@@ -100,6 +100,31 @@ void filemenu_info_draw_message_contents(
             filemenu_draw_message(filemenu_get_menu_message(0x1F), baseX + xOffset, baseY + 4, 255, 0, 0);
             break;
     }
+#elif VERSION_JP
+    // TODO: cleanup?
+    switch (menu->page) {
+        case 0:
+            filemenu_draw_message(filemenu_get_menu_message(FILE_MESSAGE_FILE_26), baseX + 10, baseY + 4, 255, 0, 0);
+            draw_number(filemenu_menus[0]->selected + 1, baseX + 62, baseY + 4 + NUMBER_OFFSET_Y, DRAW_NUMBER_CHARSET_NORMAL, MSG_PAL_WHITE, 255, DRAW_NUMBER_STYLE_MONOSPACE | DRAW_NUMBER_STYLE_ALIGN_RIGHT);
+            filemenu_draw_message(filemenu_get_menu_message(FILE_MESSAGE_HAS_BEEN_DELETED), baseX + 63, baseY + 4, 255, 0, 0);
+            break;
+        case 2:
+            filemenu_draw_message(filemenu_get_menu_message(FILE_MESSAGE_FILE_26), baseX + 10, baseY + 4, 255, 0, 0);
+            draw_number(filemenu_loadedFileIdx + 1, baseX + 62, baseY + 4, DRAW_NUMBER_CHARSET_NORMAL, MSG_PAL_WHITE, 255, DRAW_NUMBER_STYLE_MONOSPACE | DRAW_NUMBER_STYLE_ALIGN_RIGHT);
+            filemenu_draw_message(filemenu_get_menu_message(FILE_MESSAGE_COPY_FROM), baseX + 63, baseY + 4, 255, 0, 0);
+            filemenu_draw_message(filemenu_get_menu_message(FILE_MESSAGE_FILE_26), baseX + 10, baseY + 18, 255, 0, 0);
+            draw_number(filemenu_iterFileIdx + 1, baseX + 62, baseY + 18, DRAW_NUMBER_CHARSET_NORMAL, MSG_PAL_WHITE, 255, DRAW_NUMBER_STYLE_MONOSPACE | DRAW_NUMBER_STYLE_ALIGN_RIGHT);
+            filemenu_draw_message(filemenu_get_menu_message(FILE_MESSAGE_TO), baseX + 63, baseY + 18, 255, 0, 0);
+            break;
+        case 1:
+            filemenu_draw_message(filemenu_get_menu_message(FILE_MESSAGE_28), baseX + 10, baseY + 4, 255, 0, 0);
+            break;
+        case 3:
+            filemenu_draw_message(filemenu_get_menu_message(FILE_MESSAGE_FILE_26), baseX + 10, baseY + 4, 255, 0, 0);
+            draw_number(filemenu_menus[0]->selected + 1, baseX + 62, baseY + 4 + NUMBER_OFFSET_Y, DRAW_NUMBER_CHARSET_NORMAL, MSG_PAL_WHITE, 255, DRAW_NUMBER_STYLE_MONOSPACE | DRAW_NUMBER_STYLE_ALIGN_RIGHT);
+            filemenu_draw_message(filemenu_get_menu_message(FILE_MESSAGE_HAS_BEEN_CREATED), baseX + 63, baseY + 4, 255, 0, 0);
+            break;
+    }
 #else
     switch (menu->page) {
         case 0:

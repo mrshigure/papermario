@@ -1223,6 +1223,27 @@ segments:
 
   - [0x16B550, bin]
 
+  - type: code
+    dir: filemenu
+    start: 0x16B550 # fails at 170CB8 (filemenu_draw_contents_choose_name: https://decomp.me/scratch/vU80k)
+    vram: 0x80242BA0
+    subsegments:
+    - [auto, c, filemenu_common]
+    - [auto, c, filemenu_main]
+    - [auto, c, filemenu_yesno]
+    - [auto, c, filemenu_info]
+    - [auto, c, filemenu_createfile]
+    - [auto, c, filemenu_gfx]
+    - [auto, c, filemenu_msg]
+    - [auto, c, filemenu_styles]
+    - start: 0x172B90 # TODO (images corrupted)
+      type: .data
+      name: filemenu_gfx
+      subsegments:
+      - [auto, ia4, copyarrow, 64, 16]
+      - [auto, rgba32, corners_yellow, 16, 64]
+      - [auto, ia8, corners_gray, 16, 32]
+    - [0x1749F0] # TODO
   - name: battle_code
     type: code
     start: 0x1749F0

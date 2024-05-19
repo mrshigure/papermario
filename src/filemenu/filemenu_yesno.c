@@ -13,7 +13,12 @@
 #define START_GAME_FILE_X               100
 #define START_GAME_NUMBER_X             142
 #define START_GAME_QMARK_X              140
+#define COPY_FILE_NUMBER_Y              6
 #define NUMBER_OFFSET_Y                 1
+#elif VERSION_JP
+#define COPY_FILE_NUMBER_X              62
+#define COPY_FILE_NUMBER_Y              4
+#define NUMBER_OFFSET_Y                 0
 #else
 #define DELETE_FILE_DELETE_X            10
 #define DELETE_FILE_FILE_X              60
@@ -24,6 +29,7 @@
 #define START_GAME_FILE_X               127
 #define START_GAME_NUMBER_X             165
 #define START_GAME_QMARK_X              162
+#define COPY_FILE_NUMBER_Y              6
 #define NUMBER_OFFSET_Y                 0
 #endif
 
@@ -147,6 +153,7 @@ void filemenu_yesno_draw_options_contents(
     }
 }
 
+// TODO: cleanup for JP
 #if VERSION_PAL
 INCLUDE_ASM(void, "filemenu/filemenu_yesno", filemenu_yesno_draw_prompt_contents);
 #else
@@ -161,15 +168,27 @@ void filemenu_yesno_draw_prompt_contents(
 
     switch (menu->page) {
         case 0:
+#if VERSION_JP
+            filemenu_draw_message(filemenu_get_menu_message(FILE_MESSAGE_FILE_22), baseX + 10, baseY + 4, 0xFF, 0, 0);
+            draw_number(filemenu_menus[0]->selected + 1, baseX + 62, baseY + 4 + NUMBER_OFFSET_Y, DRAW_NUMBER_CHARSET_NORMAL, MSG_PAL_WHITE, 0xFF, DRAW_NUMBER_STYLE_MONOSPACE | DRAW_NUMBER_STYLE_ALIGN_RIGHT);
+            filemenu_draw_message(filemenu_get_menu_message(FILE_MESSAGE_DELETE), baseX + 63, baseY + 4, 0xFF, 0, 0);
+#else
             filemenu_draw_message(filemenu_get_menu_message(FILE_MESSAGE_DELETE), baseX + DELETE_FILE_DELETE_X, baseY + 4, 0xFF, 0, 0);
             filemenu_draw_message(filemenu_get_menu_message(FILE_MESSAGE_FILE_22), baseX + DELETE_FILE_FILE_X, baseY + 4, 0xFF, 0, 0);
             draw_number(filemenu_menus[0]->selected + 1, baseX + DELETE_FILE_NUMBER_X, baseY + 6 + NUMBER_OFFSET_Y, DRAW_NUMBER_CHARSET_NORMAL, MSG_PAL_WHITE, 0xFF, DRAW_NUMBER_STYLE_MONOSPACE | DRAW_NUMBER_STYLE_ALIGN_RIGHT);
-            filemenu_draw_message(filemenu_get_menu_message(FILE_MESSAGE_QUESTION), baseX + DELETE_FILE_QMARK_X, baseY + 4, 0xFF, 0, 0);            break;
-        case 3:
+            filemenu_draw_message(filemenu_get_menu_message(FILE_MESSAGE_QUESTION), baseX + DELETE_FILE_QMARK_X, baseY + 4, 0xFF, 0, 0);
+#endif
+            break;
+case 3:
             filemenu_draw_message(filemenu_get_menu_message(FILE_MESSAGE_FILE_22), baseX + 10, baseY + 4, 0xFF, 0, 0);
-            draw_number(filemenu_menus[0]->selected + 1, baseX + COPY_FILE_NUMBER_X, baseY + 6 + NUMBER_OFFSET_Y, DRAW_NUMBER_CHARSET_NORMAL, MSG_PAL_WHITE, 0xFF, DRAW_NUMBER_STYLE_MONOSPACE | DRAW_NUMBER_STYLE_ALIGN_RIGHT);
+            draw_number(filemenu_menus[0]->selected + 1, baseX + COPY_FILE_NUMBER_X, baseY + COPY_FILE_NUMBER_Y + NUMBER_OFFSET_Y, DRAW_NUMBER_CHARSET_NORMAL, MSG_PAL_WHITE, 0xFF, DRAW_NUMBER_STYLE_MONOSPACE | DRAW_NUMBER_STYLE_ALIGN_RIGHT);
+#if VERSION_JP
+            filemenu_draw_message(filemenu_get_menu_message(FILE_MESSAGE_WILL_BE_DELETED), baseX + 63, baseY + 4, 0xFF, 0, 0);
+            filemenu_draw_message(filemenu_get_menu_message(FILE_MESSAGE_OK_TO_COPY_TO_THIS_FILE), baseX + 26, baseY + 18, 0xFF, 0, 0);
+#else
             filemenu_draw_message(filemenu_get_menu_message(FILE_MESSAGE_WILL_BE_DELETED), baseX + 49, baseY + 4, 0xFF, 0, 0);
             filemenu_draw_message(filemenu_get_menu_message(FILE_MESSAGE_OK_TO_COPY_TO_THIS_FILE), baseX + 10, baseY + 18, 0xFF, 0, 0);
+#endif
             break;
         case 1:
             filemenu_draw_message(filemenu_get_menu_message(FILE_MESSAGE_OVERRIDE_TO_NEW_DATA), baseX + 10, baseY + 4, 0xFF, 0, 0);
@@ -187,14 +206,23 @@ void filemenu_yesno_draw_prompt_contents(
             xOffset = (147 - (i * 11)) / 2;
             filemenu_draw_file_name(filemenu_filename, i + 1, baseX + xOffset, baseY + 22, 0xFF, 0, 8, 0xB);
             xOffset += (i + 1) * 11;
+#if VERSION_JP
+            xOffset += 6;
+#endif
             filemenu_draw_message(filemenu_get_menu_message(FILE_MESSAGE_PERIOD_20), baseX + xOffset, baseY + 22, 0xFF, 0, 0);
             filemenu_draw_message(filemenu_get_menu_message(FILE_MESSAGE_OK), baseX + 70, baseY + 38, 0xFF, 0, 0);
             break;
         case 4:
+#if VERSION_JP
+            filemenu_draw_message(filemenu_get_menu_message(FILE_MESSAGE_FILE_22), baseX + 10, baseY + 4, 0xFF, 0, 0);
+            draw_number(filemenu_menus[0]->selected + 1, baseX + 62, baseY + 4 + NUMBER_OFFSET_Y, DRAW_NUMBER_CHARSET_NORMAL, MSG_PAL_WHITE, 0xFF, DRAW_NUMBER_STYLE_MONOSPACE | DRAW_NUMBER_STYLE_ALIGN_RIGHT);
+            filemenu_draw_message(filemenu_get_menu_message(FILE_MESSAGE_START_GAME_WITH), baseX + 63, baseY + 4, 0xFF, 0, 0);
+#else
             filemenu_draw_message(filemenu_get_menu_message(FILE_MESSAGE_START_GAME_WITH), baseX + START_GAME_START_WITH_X, baseY + 4, 0xFF, 0, 0);
             filemenu_draw_message(filemenu_get_menu_message(FILE_MESSAGE_FILE_22), baseX + START_GAME_FILE_X, baseY + 4, 0xFF, 0, 0);
             draw_number(filemenu_menus[0]->selected + 1, baseX + START_GAME_NUMBER_X, baseY + 6 + NUMBER_OFFSET_Y, DRAW_NUMBER_CHARSET_NORMAL, MSG_PAL_WHITE, 0xFF, DRAW_NUMBER_STYLE_MONOSPACE | DRAW_NUMBER_STYLE_ALIGN_RIGHT);
             filemenu_draw_message(filemenu_get_menu_message(FILE_MESSAGE_QUESTION), baseX + START_GAME_QMARK_X, baseY + 4, 0xFF, 0, 0);
+#endif
             break;
     }
 }

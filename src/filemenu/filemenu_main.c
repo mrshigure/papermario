@@ -48,7 +48,16 @@ extern u8 D_filemenu_8025093C[4];
 
 BSS u8 filemenu_filename[8];
 
-#if VERSION_IQUE
+#if VERSION_JP
+#define OFFSET_WIDTH        0
+#define DELETE_OFFSET_X     8
+#define CENTER_CANCEL_X     18
+#define RIGHT_CANCEL_X      20
+#define FILE_X              5
+#define FILE_NUMBER_X       31
+#define FILE_NAME_X         43
+#define NUMBER_OFFSET_Y     0
+#elif VERSION_IQUE
 #define OFFSET_WIDTH        5
 #define DELETE_OFFSET_X     9
 #define CENTER_CANCEL_X     30
@@ -611,7 +620,33 @@ void filemenu_draw_contents_file_info(s32 fileIdx,
     }
 }
 
-#if VERSION_PAL
+#if VERSION_JP
+void filemenu_draw_contents_file_title(
+    s32 fileIdx,
+    MenuPanel* menu,
+    s32 baseX, s32 baseY,
+    s32 width, s32 height,
+    s32 opacity, s32 darkening)
+{
+    if (filemenu_currentMenu == 0 && menu->selected == fileIdx) {
+        filemenu_set_cursor_goal_pos(fileIdx + 60, baseX - 4, baseY + 8);
+    }
+
+    if (!gSaveSlotHasData[fileIdx]) {
+        hud_element_set_render_pos(filemenu_hudElemIDs[14], baseX + 18, baseY + 7);
+        hud_element_draw_without_clipping(filemenu_hudElemIDs[14]);
+        draw_number(fileIdx + 1, baseX + FILE_NUMBER_X, baseY + 1 + NUMBER_OFFSET_Y, DRAW_NUMBER_CHARSET_THIN, MSG_PAL_WHITE, 255, DRAW_NUMBER_STYLE_MONOSPACE);
+    } else {
+        hud_element_set_render_pos(filemenu_hudElemIDs[14], baseX + 18, baseY + 7);
+        hud_element_draw_without_clipping(filemenu_hudElemIDs[14]);
+        draw_number(fileIdx + 1, baseX + FILE_NUMBER_X, baseY + 1 + NUMBER_OFFSET_Y, DRAW_NUMBER_CHARSET_THIN, MSG_PAL_WHITE, 255, DRAW_NUMBER_STYLE_MONOSPACE);
+        filemenu_draw_file_name(
+            gSaveSlotMetadata[fileIdx].filename,
+            ARRAY_COUNT(gSaveSlotMetadata[fileIdx].filename),
+            baseX + FILE_NAME_X, baseY + 1, 255, 0, 1, 9);
+    }
+}
+#elif VERSION_PAL
 void filemenu_draw_contents_file_title(
     s32 fileIdx,
     MenuPanel* menu,
@@ -641,7 +676,7 @@ void filemenu_draw_contents_file_title(
             ARRAY_COUNT(gSaveSlotMetadata[fileIdx].filename),
             baseX + tmp,
             baseY + 1, 255, 0, 1, 9);
-        }
+    }
 }
 #else
 void filemenu_draw_contents_file_title(

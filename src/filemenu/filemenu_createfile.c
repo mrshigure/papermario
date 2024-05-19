@@ -160,6 +160,7 @@ void filemenu_draw_contents_file_create_header(
 #endif
 }
 
+// TODO: still some reg issues (are jumps correct?): https://decomp.me/scratch/vU80k
 #if VERSION_PAL
 INCLUDE_ASM(void, "filemenu/filemenu_createfile", filemenu_draw_contents_choose_name);
 #else
@@ -168,6 +169,8 @@ s32 msg_get_print_char_width(s32 character, s32 charset, s32 variation, f32 msgS
 #if VERSION_PAL
 #define FILEMENU_ROW_AMT (15)
 #define FILEMENU_C9_OFFSET (16)
+#elif VERSION_JP
+#define FILEMENU_ROW_AMT (15)
 #else
 #define FILEMENU_ROW_AMT (17)
 #define FILEMENU_C9_OFFSET (5)
@@ -229,6 +232,21 @@ void filemenu_draw_contents_choose_name(
                             flags = 0;
                             color = 10;
                         }
+#if VERSION_JP
+                        xOffset = 17 * col + 13 + (col / 5) * 10;
+                        yOffset = FILEMENU_ROW_AMT * row + 4;
+                        specialChar = c;
+                        if (c >= 0xC6 && c < 0xF0) {
+                            if (c >= 0xC6) {
+                                hud_element_set_render_pos(filemenu_createfile_hudElems[2], baseX + xOffset + 22, baseY + yOffset + 8);
+                                hud_element_draw_without_clipping(filemenu_createfile_hudElems[2]);
+                                flags = 0;
+                            }
+                        }
+                        if (specialChar == 0xC9 || specialChar == 0xCA) {
+                            xOffset += 6;
+                        }
+#else
                         xOffset = 19 * col + 12;
                         yOffset = FILEMENU_ROW_AMT * row + 5;
 #if VERSION_PAL
@@ -267,6 +285,7 @@ void filemenu_draw_contents_choose_name(
                             yOffset -= 1;
                             xNudge = 9;
                         }
+#endif
 #if VERSION_PAL
                         filemenu_draw_message((u8*)c, baseX + xOffset + ((8 - xNudge) / 2), baseY + yOffset, 255, color, flags);
 #else
@@ -289,6 +308,21 @@ void filemenu_draw_contents_choose_name(
                         flags = 0;
                         color = 10;
                     }
+#if VERSION_JP
+                    xOffset = col * 17 + 13 + (col / 5) * 10;
+                    yOffset = row * FILEMENU_ROW_AMT + 4;
+                    specialChar = c;
+                    if (c >= 0xC6 && c < 0xF0) {
+                        if (c >= 0xC6) {
+                            hud_element_set_render_pos(filemenu_createfile_hudElems[2], baseX + xOffset + 22, baseY + yOffset + 8);
+                            hud_element_draw_without_clipping(filemenu_createfile_hudElems[2]);
+                            flags = 0;
+                        }
+                    }
+                    if (specialChar == 0xC9 || specialChar == 0xCA) {
+                        xOffset += 6;
+                    }
+#else
                     xOffset = col * 19 + 12;
                     yOffset = row * FILEMENU_ROW_AMT + 5;
 #if VERSION_PAL
@@ -323,6 +357,7 @@ void filemenu_draw_contents_choose_name(
                         yOffset -= 1;
                         xNudge = 9;
                     }
+#endif
 #if VERSION_PAL
                     filemenu_draw_message((u8*)c, baseX + xOffset + ((8 - xNudge) / 2), baseY + yOffset, 255, color, flags);
 #else
@@ -338,9 +373,15 @@ void filemenu_draw_contents_choose_name(
             D_8024A18C = -4;
         }
         D_8024A18C++;
+#if VERSION_JP
+        filemenu_set_cursor_goal_pos(WINDOW_ID_FILEMENU_KEYBOARD,
+                                     baseX + (menu->col * 17 + 3 + (menu->col / 5) * 10),
+                                     baseY + 12 + menu->row * FILEMENU_ROW_AMT);
+#else
         filemenu_set_cursor_goal_pos(WINDOW_ID_FILEMENU_KEYBOARD,
                                      baseX + 2 + menu->col * 19,
                                      baseY + 13 + menu->row * FILEMENU_ROW_AMT);
+#endif
     }
 }
 #endif
